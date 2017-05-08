@@ -6,6 +6,8 @@ console.log('Welcome to the GitHub Avatar Downloader!');
 var GITHUB_USER = "chaodonghu"
 var GITHUB_TOKEN = "f0c38d19f1c32dc4bf6231e381b77b6e0eff7a1c"
 
+// makes a request for JSON, getting back an array of contributors and passes
+// this data to cb, an anonymous callback function that is given
 function getRepoContributors(repoOwner, repoName, cb) {
   var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
   console.log(requestURL);
@@ -26,6 +28,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
+
 function cb (response) {
   // parse the body string into an javascript object
   var results = JSON.parse(response.body);
@@ -38,7 +41,7 @@ function cb (response) {
   }
 }
 
-// get url and write the images url to a new file path
+// fetches desired url and write the images url to a new file path
 function downloadImageByURL (url ,filePath) {
   request.get(url).pipe(fs.createWriteStream(filePath));
 }
