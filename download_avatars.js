@@ -3,6 +3,9 @@ var fs = require('fs');
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
+var repoOwner = process.argv[2];
+var repoName = process.argv[3];
+
 var GITHUB_USER = "chaodonghu"
 var GITHUB_TOKEN = "f0c38d19f1c32dc4bf6231e381b77b6e0eff7a1c"
 
@@ -22,7 +25,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
   request.get(options, function(err, response) {
     if (err) {
       throw err
-    } if(response.statusCode === 200) {;
+    } if (response.statusCode === 200) {;
       cb(response);
   }
   });
@@ -43,11 +46,14 @@ function cb (response) {
 
 // fetches desired url and write the images url to a new file path
 function downloadImageByURL (url ,filePath) {
-  request.get(url).pipe(fs.createWriteStream(filePath));
+  var content = request.get(url)
+  content.pipe(fs.createWriteStream(filePath));
 }
 
-getRepoContributors("jquery", "jquery", cb);
-// function(err, result) {
-//   console.log("Errors:", err);
-//   console.log("Result:", result);
-// });
+// supports command line arguements and makes them required arguements
+if (repoOwner && repoName) {
+  getRepoContributors(repoOwner, repoName, cb);
+  console.log('jpg\'s have been stored in avatars folder!');
+} else {
+  console.log('ERROR: Please enter both a repoOwner and repoName');
+}
